@@ -37,7 +37,7 @@ The lab environment consists of:
 
 - **Failed Login Attempt Map** — visualized via Azure Workbooks (JSON available on GitHub)
 - **24-hour Live Attack Graph** — timestamped from **3:00 pm CST (Sept 4, 2025)** to **3:00 pm CST (Sept 5, 2025)**  
-  :contentReference[oaicite:0]{index=0}
+
 
 - **Incident Response Example:**
   - **Incident 1** — triggered by an “Excessive Windows Logon Failure” alert. Analyzed using a KQL query, then labeled as **False Positive** and closed.  
