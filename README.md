@@ -1,6 +1,6 @@
 # LIVE SOC/SIEM Detection and Response Lab
 
-Images/Topology.webp
+
 
 This repository accompanies the **LIVE SOC/SIEM Detection and Response Lab** developed in an Azure cloud environment. It captures real-time attack simulations, log ingestion, alerting, and incident response workflows using Windows 11 VMs, Log Analytics, and Microsoft Sentinel.
 
