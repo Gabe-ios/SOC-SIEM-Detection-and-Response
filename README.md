@@ -1,55 +1,86 @@
 # LIVE SOC/SIEM Detection and Response Lab
 
+<p align="center">
+  <img src="Images/Topology.webp" alt="Lab Topology" width="600"/>
+</p>
 
+This repository showcases the **LIVE SOC/SIEM Detection and Response Lab**, built in an **Azure cloud environment**. The lab simulates real-world threats by ingesting logs from Windows 11 VMs into **Microsoft Sentinel**, enabling detection, alerting, and incident response.  
 
-This repository accompanies the **LIVE SOC/SIEM Detection and Response Lab** developed in an Azure cloud environment. It captures real-time attack simulations, log ingestion, alerting, and incident response workflows using Windows 11 VMs, Log Analytics, and Microsoft Sentinel.
+To kick off my senior year, I deployed a **mini-honeynet** exposed to the internet for two separate 24-hour sessions, capturing live telemetry to study attacks, implement defenses, and measure results.
 
-To kick off the new senior school year, we built a mini-honeynet that processes live event logs and feeds them into a SIEM solution. The network remained intentionally exposed for two separate 24-hour sessions.
-
-Check out the lab’s GitHub for ongoing enhancements including custom security rules, network expansion, and threat hunting tactics:  
-**GitHub:** https://github.com/Gabe-ios/SOC-SIEM-Detection-and-Response
+🔗 **Medium Blog:** [Live SOC SIEM Detection and Response Lab](https://medium.com/@gabriel.walkerzuniga/live-soc-siem-detection-and-response-lab-eaede7fa6dd2)  
+🔗 **GitHub Repo:** [SOC-SIEM-Detection-and-Response](https://github.com/Gabe-ios/SOC-SIEM-Detection-and-Response)  
 
 ---
 
-##  Architecture Overview
+## ⚙️ Architecture Overview  
 
 The lab environment consists of:
 
-- **Virtual Network**  
+- **Virtual Network (VNet)**  
 - **Network Security Group (NSG)**  
 - **Two Windows 11 Virtual Machines**  
 - **Log Analytics Workspace**  
 - **Azure Storage Account**  
-- **Microsoft Sentinel (SIEM)**
+- **Microsoft Sentinel (SIEM)**  
 
 ---
 
-## Live Attack (Before Hardening)
+## 🚨 Live Attack — Before Hardening  
 
-- The network was configured without any firewall or NSG restrictions, allowing free access.
-- Windows Firewall was disabled on each VM; NSG allowed **all inbound traffic**.
-- The lab ran for 24-hour intervals to record activity and simulate attack vectors.
+<p align="center">
+  <img src="Images/B4Hardening.webp" alt="Live Attack Map Before Hardening" width="600"/>
+</p>
 
-### Metrics Monitored:
+- NSG allowed **all inbound traffic**; Windows Firewall disabled.  
+- Lab left exposed for **24 hours** to capture unrestricted activity.  
 
-- Failed login attempt map via Azure Workbooks  
-- Event logs forwarded for alert generation
+### 📊 Metrics  
+| Metric           | Count |
+|------------------|-------|
+| SecurityEvent    | 45k   |
+| Security Alert   | 32    |
+| SecurityIncident | 47    |
 
-### Observables:
+### 🔎 Observables  
+- **Failed Login Attempt Map** (via Azure Workbooks)  
+- **24-hour Attack Graph** (Sept 4, 2025 — Sept 5, 2025)  
 
-- **Failed Login Attempt Map** — visualized via Azure Workbooks (JSON available on GitHub)
-- **24-hour Live Attack Graph** — timestamped from **3:00 pm CST (Sept 4, 2025)** to **3:00 pm CST (Sept 5, 2025)**  
+---
 
+## 🛡️ Live Attack — After Hardening (Attempt 1)  
 
-- **Incident Response Example:**
-  - **Incident 1** — triggered by an “Excessive Windows Logon Failure” alert. Analyzed using a KQL query, then labeled as **False Positive** and closed.  
-  :contentReference[oaicite:1]{index=1}
-  - **Incident 9** — a real brute-force attack simulated with 41 failed login attempts across multiple usernames.
+<p align="center">
+  <img src="Images/AfterHardening.webp" alt="Live Attack Map After Hardening" width="600"/>
+</p>
 
-#### Example KQL Query Used:
-```kql
-SecurityEvent
-| where EventID == 4625
-| project TimeGenerated, Account, IpAddress, Computer, LogonType, FailureReason
-| summarize Attempts = count() by IpAddress
-| order by Attempts desc
+- **Windows Firewall enabled**  
+- **NSG reset to default** instead of “allow all inbound traffic”  
+
+### 📊 Metrics  
+| Metric           | Count |
+|------------------|-------|
+| SecurityEvent    | 45k   |
+| Security Alert   | 10    |
+| SecurityIncident | 16    |
+
+### 📉 Percent Change (Before vs. After Hardening)  
+| Metric           | Change   |
+|------------------|----------|
+| Security Alert   | -68.75%  |
+| SecurityIncident | -65.96%  |
+
+---
+
+## ✅ Conclusion  
+
+- **Threat volume decreased significantly**, but persistent attacks continued.  
+- Hardened defenses reduced alerts/incidents, but **further tuning required**.  
+- Next steps include:  
+  - Developing **stronger NSG firewall rules**  
+  - Building **incident response playbooks** from telemetry  
+  - Expanding lab for continuous detection, hunting, and response  
+
+---
+
+<p align="center"><i>This is an ongoing project with regular updates as defenses evolve and new attacks are studied.</i></p>
